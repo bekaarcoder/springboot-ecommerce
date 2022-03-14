@@ -98,8 +98,16 @@
                         <td th:text="${user.lastName}"></td>
                         <td th:text="${user.email}"></td>
                         <td>
-                            <span th:if="${user.enabled == true}"><i class="bi bi-check-circle-fill text-success"></i></span>
-                            <span th:if="${user.enabled == false}"><i class="bi bi-check-circle-fill text-secondary"></i></span>
+                            <span th:if="${user.enabled == true}">
+                                <a th:href="@{'/users/' + ${user.id} + '/enable/false'}" title="Disable User">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                </a>
+                            </span>
+                            <span th:if="${user.enabled == false}">
+                                <a th:href="@{'/users/' + ${user.id} + '/enable/true'}" title="Enable User">
+                                    <i class="bi bi-check-circle-fill text-secondary"></i>
+                                </a>
+                            </span>
                         </td>
                         <td th:text="${user.roles}"></td>
                         <td>

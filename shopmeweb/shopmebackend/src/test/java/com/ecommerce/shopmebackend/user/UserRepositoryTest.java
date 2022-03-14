@@ -101,4 +101,22 @@ class UserRepositoryTest {
         assertNotNull(count);
     }
 
+    @Test
+    public void testEnableUser() {
+        Long id = (long) 3;
+        userRepository.updateUserStatus(id, true);
+
+        User user = userRepository.findById(id).get();
+        assertTrue(user.isEnabled());
+    }
+
+    @Test
+    public void testDisableUser() {
+        Long id = (long) 3;
+        userRepository.updateUserStatus(id, false);
+
+        User user = userRepository.findById(id).get();
+        assertFalse(user.isEnabled());
+    }
+
 }

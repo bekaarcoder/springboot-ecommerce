@@ -83,4 +83,8 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    public void setEnabled(Long id, boolean status) {
+        userRepository.updateUserStatus(id, status);
+    }
 }
