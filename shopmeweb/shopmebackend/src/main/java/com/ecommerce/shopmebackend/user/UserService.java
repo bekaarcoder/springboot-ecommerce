@@ -1,5 +1,6 @@
 package com.ecommerce.shopmebackend.user;
 
+import com.ecommerce.shopmebackend.exceptions.UserNotFoundException;
 import com.ecommerce.shopmecommon.entity.Role;
 import com.ecommerce.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -34,7 +36,18 @@ public class UserService {
     }
 
     public void saveUser(User user) {
-        encodePassword(user);
+        boolean isUpdatingUser = (user.getId() != null);
+        if (isUpdatingUser) {
+            User existingUser = userRepository.findById(user.getId()).get();
+            if(user.getPassword().isEmpty()) {
+                user.setPassword(existingUser.getPassword());
+            } else {
+                encodePassword(user);
+            }
+        } else {
+            encodePassword(user);
+        }
+
         userRepository.save(user);
     }
 
@@ -43,8 +56,23 @@ public class UserService {
         user.setPassword(encodedPassword);
     }
 
-    public boolean isEmailUnique(String email) {
+    public boolean isEmailUnique(Long id, String email) {
         User user = userRepository.findByEmail(email);
-        return user == null;
+        if (user == null) return true;
+        boolean isCreatingNew = (id == null);
+        if(isCreatingNew) {
+            if (user != null) return false;
+        } else {
+            if(user.getId() != id) return false;
+        }
+        return true;
+    }
+
+    public User getUser(Long id) throws UserNotFoundException {
+        try {
+            return userRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            throw new UserNotFoundException("Could not find any user with the ID " + id);
+        }
     }
 }

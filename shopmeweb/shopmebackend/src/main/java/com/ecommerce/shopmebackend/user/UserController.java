@@ -1,10 +1,12 @@
 package com.ecommerce.shopmebackend.user;
 
+import com.ecommerce.shopmebackend.exceptions.UserNotFoundException;
 import com.ecommerce.shopmecommon.entity.Role;
 import com.ecommerce.shopmecommon.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,6 +35,7 @@ public class UserController {
         user.setEnabled(true);
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
+        model.addAttribute("pageTitle", "Create New User");
         return "user_form";
     }
 
@@ -41,7 +44,24 @@ public class UserController {
         System.out.println(user);
         userService.saveUser(user);
 
-        redirectAttributes.addFlashAttribute("message", "New user have been created.");
+        redirectAttributes.addFlashAttribute("message", "User has been saved.");
         return "redirect:/users";
+    }
+
+    @GetMapping("/users/edit/{id}")
+    public String editUser(@PathVariable(name = "id") Long id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            User user = userService.getUser(id);
+            List<Role> roles = userService.listRoles();
+
+            model.addAttribute("user", user);
+            model.addAttribute("roles", roles);
+            model.addAttribute("pageTitle", "Edit User");
+        } catch(UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("warning", "Could not find any user with the id: " + id);
+            return "redirect:/users";
+        }
+
+        return "user_form";
     }
 }
