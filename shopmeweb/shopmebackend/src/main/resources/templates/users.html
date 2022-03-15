@@ -93,7 +93,9 @@
                 <tbody>
                     <tr th:each="user : ${userList}">
                         <td th:text="${user.id}"></td>
-                        <td></td>
+                        <td>
+                            <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" width="50">
+                        </td>
                         <td th:text="${user.firstName}"></td>
                         <td th:text="${user.lastName}"></td>
                         <td th:text="${user.email}"></td>
