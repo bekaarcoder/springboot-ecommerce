@@ -4,6 +4,7 @@ import com.ecommerce.shopmebackend.exceptions.UserNotFoundException;
 import com.ecommerce.shopmebackend.utils.FileUploadUtil;
 import com.ecommerce.shopmecommon.entity.Role;
 import com.ecommerce.shopmecommon.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -28,7 +29,28 @@ public class UserController {
 
     @GetMapping("/users")
     public String listUsers(Model model) {
-        List<User> userList = userService.listAll();
+        return listByPage(1, model);
+    }
+
+    @GetMapping("/users/page/{pageNumber}")
+    public String listByPage(@PathVariable(name = "pageNumber") int pageNumber, Model model) {
+        Page<User> page = userService.listByPage(pageNumber);
+        List<User> userList = page.getContent();
+
+        System.out.println("PageNumber: " + pageNumber);
+        System.out.println("Total Users: " + page.getTotalElements());
+        System.out.println("Total Pages: " + page.getTotalPages());
+
+        long startCount = (pageNumber - 1) * UserService.USERS_PER_PAGE + 1;
+        long endCount = startCount + UserService.USERS_PER_PAGE - 1;
+        if (endCount > page.getTotalElements()) {
+            endCount = page.getTotalElements();
+        }
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("currentPage", pageNumber);
         model.addAttribute("userList", userList);
         return "users";
     }
