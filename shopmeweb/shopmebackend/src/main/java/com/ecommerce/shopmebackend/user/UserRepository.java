@@ -1,6 +1,8 @@
 package com.ecommerce.shopmebackend.user;
 
 import com.ecommerce.shopmecommon.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -21,4 +23,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
             nativeQuery = true
     )
     void updateUserStatus(Long id, boolean enabled);
+
+    @Query("select u from User u where concat(u.id, ' ', u.firstName, ' ', u.lastName, ' ', u.email) like %?1%")
+    Page<User> findAll(String keyword, Pageable pageable);
 }
