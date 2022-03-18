@@ -5,6 +5,7 @@ import com.ecommerce.shopmebackend.utils.FileUploadUtil;
 import com.ecommerce.shopmecommon.entity.Role;
 import com.ecommerce.shopmecommon.entity.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -29,12 +30,17 @@ public class UserController {
 
     @GetMapping("/users")
     public String listUsers(Model model) {
-        return listByPage(1, model);
+        return listByPage(1, "firstName", "asc", model);
     }
 
     @GetMapping("/users/page/{pageNumber}")
-    public String listByPage(@PathVariable(name = "pageNumber") int pageNumber, Model model) {
-        Page<User> page = userService.listByPage(pageNumber);
+    public String listByPage(
+            @PathVariable(name = "pageNumber") int pageNumber,
+            @Param("sortField") String sortField,
+            @Param("sortDir") String sortDir,
+            Model model
+    ) {
+        Page<User> page = userService.listByPage(pageNumber, sortField, sortDir);
         List<User> userList = page.getContent();
 
         System.out.println("PageNumber: " + pageNumber);
@@ -46,12 +52,17 @@ public class UserController {
         if (endCount > page.getTotalElements()) {
             endCount = page.getTotalElements();
         }
+
+        String sortReverseDir = sortDir.equals("asc") ? "desc" : "asc";
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("startCount", startCount);
         model.addAttribute("endCount", endCount);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("userList", userList);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("sortReverseDir", sortReverseDir);
         return "users";
     }
 

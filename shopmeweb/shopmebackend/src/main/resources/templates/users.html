@@ -80,11 +80,35 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr class="table-dark">
-                        <th>User ID</th>
+                        <th>
+                            <a th:if="${sortDir == 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=id&sortDir=desc'}" class="text-reset text-decoration-none">ID</a>
+                            <a th:if="${sortDir != 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=id&sortDir=asc'}" class="text-reset text-decoration-none">ID</a>
+                            <span th:if="${sortField == 'id'}">
+                                <i th:class="${sortDir == 'asc' ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'}"></i>
+                            </span>
+                        </th>
                         <th>Photo</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
+                        <th>
+                            <a th:if="${sortDir == 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=firstName&sortDir=desc'}" class="text-reset text-decoration-none">First Name</a>
+                            <a th:if="${sortDir != 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=firstName&sortDir=asc'}" class="text-reset text-decoration-none">First Name</a>
+                            <span th:if="${sortField == 'firstName'}">
+                                <i th:class="${sortDir == 'asc' ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'}"></i>
+                            </span>
+                        </th>
+                        <th>
+                            <a th:if="${sortDir == 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=lastName&sortDir=desc'}" class="text-reset text-decoration-none">Last Name</a>
+                            <a th:if="${sortDir != 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=lastName&sortDir=asc'}" class="text-reset text-decoration-none">Last Name</a>
+                            <span th:if="${sortField == 'lastName'}">
+                                <i th:class="${sortDir == 'asc' ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'}"></i>
+                            </span>
+                        </th>
+                        <th>
+                            <a th:if="${sortDir == 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=email&sortDir=desc'}" class="text-reset text-decoration-none">Email</a>
+                            <a th:if="${sortDir != 'asc'}" th:href="@{'/users/page/' + ${currentPage} + '?sortField=email&sortDir=asc'}" class="text-reset text-decoration-none">Email</a>
+                            <span th:if="${sortField == 'email'}">
+                                <i th:class="${sortDir == 'asc' ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'}"></i>
+                            </span>
+                        </th>
                         <th>Enabled</th>
                         <th>Roles</th>
                         <th></th>
@@ -126,16 +150,16 @@
             <nav>
                 <ul class="pagination justify-content-center">
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/users/page/1}">First</a>
+                        <a class="page-link" th:href="@{'/users/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
                     </li>
                     <li th:class="${currentPage == 1 ? 'page-item disabled': 'page-item'}">
-                        <a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1}}">Previous</a>
+                        <a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
                     </li>
                     <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}">
-                        <a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1}}">Next</a>
+                        <a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">Last</a>
+                        <a class="page-link" th:href="@{'/users/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
                     </li>
                 </ul>
             </nav>
