@@ -3,6 +3,7 @@ package com.ecommerce.shopmebackend.user;
 import com.ecommerce.shopmebackend.exceptions.UserNotFoundException;
 import com.ecommerce.shopmebackend.utils.FileUploadUtil;
 import com.ecommerce.shopmebackend.utils.UserCsvExporter;
+import com.ecommerce.shopmebackend.utils.UserExcelExporter;
 import com.ecommerce.shopmecommon.entity.Role;
 import com.ecommerce.shopmecommon.entity.User;
 import org.springframework.data.domain.Page;
@@ -141,6 +142,13 @@ public class UserController {
     public void exportToCSV(HttpServletResponse response) throws IOException {
         List<User> userList = userService.listAll();
         UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(userList, response);
+    }
+
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<User> userList = userService.listAll();
+        UserExcelExporter exporter = new UserExcelExporter();
         exporter.export(userList, response);
     }
 }
