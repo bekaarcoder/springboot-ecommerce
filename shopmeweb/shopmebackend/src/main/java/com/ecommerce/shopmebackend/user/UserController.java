@@ -2,6 +2,7 @@ package com.ecommerce.shopmebackend.user;
 
 import com.ecommerce.shopmebackend.exceptions.UserNotFoundException;
 import com.ecommerce.shopmebackend.utils.FileUploadUtil;
+import com.ecommerce.shopmebackend.utils.UserCsvExporter;
 import com.ecommerce.shopmecommon.entity.Role;
 import com.ecommerce.shopmecommon.entity.User;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -133,5 +135,12 @@ public class UserController {
         String message = "User with id " + id + " has been " + enableStatus;
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/users";
+    }
+
+    @GetMapping("/users/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<User> userList = userService.listAll();
+        UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(userList, response);
     }
 }
