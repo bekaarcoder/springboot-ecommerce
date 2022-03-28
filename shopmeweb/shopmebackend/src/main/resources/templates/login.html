@@ -12,6 +12,9 @@
     <div class="row justify-content-center vh-100 align-items-center">
         <div class="col-md-4">
             <h2 class="text-center">ShopMe Admin Login</h2>
+            <div th:if="${param.error}">
+                <p class="text-danger my-2 text-center">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+            </div>
             <div class="card my-3">
                 <div class="card-body">
                     <form th:action="@{/login}" method="post">
