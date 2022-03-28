@@ -20,12 +20,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("static/**");
+        web.ignoring().antMatchers("static/**", "/webjars/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll();
+        http.authorizeRequests().anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/login")
+            .usernameParameter("email")
+            .permitAll();
     }
 
 }
