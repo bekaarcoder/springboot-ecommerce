@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8" http-equiv="Content-Type" content="text/html">
     <title>ShopMe Admin Panel - Home</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
@@ -56,6 +57,18 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/settings}">Settings</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mb-2">
+                    <li class="nav-item d-flex align-items-center">
+                        <i class="bi bi-person-circle text-secondary"></i>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" sec:authentication="principal.fullName" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
